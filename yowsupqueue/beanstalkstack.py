@@ -29,9 +29,12 @@ class BeanstalkStack(threading.Thread):
                     if message["type"] == "simple":
                         print(messageBody)
                         self.sendMessageToWhatsapp(message["address"], message["body"])
+                    elif message["type"] == "image":
+                        print(messageBody)
+                        self.sendImage(message["address"], message["body"])
                     else:
                         raise Exception("Unrecognized Message: %s" % message)
-                    print("Sucessfully sended Message")
+                    print("Sucessfully sent Message")
                     job.delete()
 
                 except Exception as e:
@@ -57,6 +60,6 @@ class BeanstalkStack(threading.Thread):
         #self.output(number)
         self.yowsUpStack.broadcastEvent(YowLayerEvent(name=QueueLayer.EVENT_SEND_MESSAGE, msg=msg, number=number))
 
-    #def sendImage(self, number, path):
-    #   self.broadcastEvent(YowLayerEvent(name=QueueLayer.EVENT_SEND_IMAGE, path=path, number=number))
+    def sendImage(self, number, path):
+       self.yowsUpStack.broadcastEvent(YowLayerEvent(name=QueueLayer.EVENT_SEND_IMAGE, path=path, number=number))
 
